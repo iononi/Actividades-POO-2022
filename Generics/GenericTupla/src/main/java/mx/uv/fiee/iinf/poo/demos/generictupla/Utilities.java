@@ -1,4 +1,3 @@
-
 package mx.uv.fiee.iinf.poo.demos.generictupla;
 
 /**

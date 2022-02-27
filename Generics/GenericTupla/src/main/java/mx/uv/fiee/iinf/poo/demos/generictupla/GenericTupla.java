@@ -1,5 +1,8 @@
 package mx.uv.fiee.iinf.poo.demos.generictupla;
 
+//(x1, y1)
+//(x2, y2)
+
 public class GenericTupla<K, V> {
 
     private final K key;
