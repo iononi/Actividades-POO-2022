@@ -9,6 +9,9 @@ public class Main {
 
         var factory2 = getProvider ("DbEngine");
         factory2.create ("NoSQL");
+
+        var factory3 = getProvider ("SocialNetwork");
+        factory3.create ("Facebook");
     }
 
     private static IFactory getProvider (String choice) {
