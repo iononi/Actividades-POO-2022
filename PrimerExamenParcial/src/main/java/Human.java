@@ -18,7 +18,7 @@ public class Human implements Print {
 
     @Override
     public String toString() {
-        return String.format("Name: %s, Age: %d", this.name, this.age);
+        return String.format("Human Name: %s, Age: %d", this.name, this.age);
     }
 
     @Override

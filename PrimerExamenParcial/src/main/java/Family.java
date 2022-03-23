@@ -1,4 +1,4 @@
-public class Family<T> {
+public class Family<T extends Print> {
 
     private T father;
     private T mother;
