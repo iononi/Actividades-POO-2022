@@ -15,16 +15,6 @@ public class NumericTextField extends JTextField {
                         || (e.getKeyChar() == ' ' && NumericTextField.this.getText().contains(" ")) || NumericTextField.this.getText().length() == 13 ) {
                     e.consume();
                 }
-
-                if ( !NumericTextField.this.getText().matches("\\([\\d]{3}\\)[ ]{1}[\\d]{7}") ) {
-                    NumericTextField.this.setBackground(Color.RED);
-                    NumericTextField.this.setForeground(Color.WHITE);
-                }
-
-                if ( NumericTextField.this.getText().length() == 12 && NumericTextField.this.getText().matches("\\([\\d]{3}\\)[ ]{1}[\\d]{6}") ) {
-                    NumericTextField.this.setBackground(Color.WHITE);
-                    NumericTextField.this.setForeground(Color.RED);
-                }
             }
 
             @Override
@@ -34,7 +24,13 @@ public class NumericTextField extends JTextField {
 
             @Override
             public void keyReleased (KeyEvent e) {
-
+                if ( !NumericTextField.this.getText().matches("\\([\\d]{3}\\)[ ]{1}[\\d]{7}") ) {
+                    NumericTextField.this.setBackground(Color.RED);
+                    NumericTextField.this.setForeground(Color.WHITE);
+                } else {
+                    NumericTextField.this.setBackground(Color.WHITE);
+                    NumericTextField.this.setForeground(Color.BLACK);
+                }
             }
         });
     }
