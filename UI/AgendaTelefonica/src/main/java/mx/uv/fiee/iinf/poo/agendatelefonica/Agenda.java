@@ -5,13 +5,14 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 
 /**
  * Clase que representa nuestra interfaz para la agenda telefónica
  */
 class Agenda extends JFrame {
     private JTextField tfName; // campos de datos
-    private JButton btnAdd, btnDelete; // acciones
+    private JButton btnAdd, btnDelete, btnSave; // acciones
     private MyTextField tfPhone; //JTextfield personalizado
     // JTable nos sirve para almacenar el listado de datos que deseamos mostrar al usuario
     private JTable table;
@@ -45,6 +46,21 @@ class Agenda extends JFrame {
                     tfName.grabFocus();
                 else if (tfPhone.getText().length() == 0)
                     tfPhone.grabFocus();
+
+                if ( tfName.getText().length() > 0 && tfPhone.getText().length() == 13 ) {
+                    tfName.setText("");
+                    tfPhone.setText("");
+                    tfPhone.setBackground(Color.WHITE);
+                    tfPhone.setForeground(Color.BLACK);
+                }
+            }
+        });
+
+        btnSave = new JButton("Save");
+        btnSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Agenda.this.saveOnFile();
             }
         });
 
@@ -58,8 +74,11 @@ class Agenda extends JFrame {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (table.getSelectedRow() > -1) // validamos si existe algún elemento seleccionado
+                if (table.getSelectedRow() > -1) { // validamos si existe algún elemento seleccionado
                     model.removeRow(table.getSelectedRow()); // si existe, se elimina del modelo
+                    Agenda.this.saveOnFile();
+                }
+
             }
         });
 
@@ -67,6 +86,7 @@ class Agenda extends JFrame {
         model = new DefaultTableModel();
         model.addColumn("Nombre"); // constará de dos columnas, nombre
         model.addColumn("Teléfono"); // y teléfono
+        loadtoTable();
 
         // creamos al JTable y definimos algunas características
         table = new JTable(model);
@@ -92,6 +112,7 @@ class Agenda extends JFrame {
         pnlTOP.setLayout(boxLayout);
         pnlTOP.add(pnlFields);
         pnlTOP.add(btnAdd);
+        pnlTOP.add(btnSave);
 
         // al botón ELIMINAR lo colocamos en un contenedor JPanel, con el objetivo de agegar más controles
         // en esa sección posteriormente
@@ -112,5 +133,65 @@ class Agenda extends JFrame {
         add(BorderLayout.SOUTH, pnlBOTTOM);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // establece el comportamiento de cierre
+    }
+
+    private void saveOnFile() {
+        try {
+            File f = new File("Agenda.txt");
+            if ( !f.exists() ) {
+                try {
+                    f.createNewFile();
+                }catch (IOException ex) {
+                    JOptionPane.showMessageDialog(Agenda.this, "Failed while creating 'Agenda.txt' file",
+                            "Error creating file", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            FileOutputStream fos = new FileOutputStream(f, false);
+            OutputStreamWriter osw = new OutputStreamWriter(fos,"utf-8");
+            BufferedWriter bw = new BufferedWriter(osw);
+            for (int i = 0; i < table.getRowCount(); i++) {
+                String name = "", phone = "";
+                for (int j = 0; j < table.getColumnCount() - 1; j++) {
+                    name = (String) table.getValueAt(i, j);
+                    phone = (String) table.getValueAt(i, j + 1);
+                }
+                bw.write(String.format("%s:%s\r\n", name, phone));
+            }
+            bw.close();
+            osw.close();
+            fos.close();
+
+        }catch (IOException ex) {
+            JOptionPane.showMessageDialog(Agenda.this, "Error saving contacts",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void loadtoTable() {
+        File f = new File("Agenda.txt");
+        if ( !f.exists() ) {
+            try{
+                f.createNewFile();
+            }catch (IOException ex) {
+                JOptionPane.showMessageDialog(Agenda.this, "Failed while creating 'Agenda.txt' file",
+                        "Error creating file", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        try {
+            FileReader fr = new FileReader(f);
+            BufferedReader br = new BufferedReader(fr);
+            String[] data;
+            String line = "";
+            while ( (line = br.readLine()) != null ) {
+                data = line.split(":");
+                model.addRow(data);
+            }
+        }catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(Agenda.this, "Failed while reading 'Agenda.txt' file",
+                    "File 'Agenda.txt' not found", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
