@@ -36,7 +36,7 @@ class Agenda extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // validamos que los campos no estén vacíos
-                if (tfPhone.getText().length() > 0 && tfName.getText().length() > 0) {
+                if (tfPhone.getText().matches("\\([\\d]{3}\\) [\\d]{7}") && tfName.getText().length() > 0) {
                     // anexamos los valores de los campos al modelo
                     model.addRow(new String[]{tfName.getText(), tfPhone.getText()});
                 }
@@ -44,10 +44,10 @@ class Agenda extends JFrame {
                 // si alguno de los campos está vacío, pasamos el foco a él
                 if (tfName.getText().length() == 0)
                     tfName.grabFocus();
-                else if (tfPhone.getText().length() == 0)
+                else if (tfPhone.getText().length() == 0 || !tfPhone.getText().matches("\\([\\d]{3}\\) [\\d]{7}"))
                     tfPhone.grabFocus();
 
-                if ( tfName.getText().length() > 0 && tfPhone.getText().length() == 13 ) {
+                if ( tfName.getText().length() > 0 && tfPhone.getText().matches("\\([\\d]{3}\\) [\\d]{7}") ) {
                     tfName.setText("");
                     tfPhone.setText("");
                     tfPhone.setBackground(Color.WHITE);
