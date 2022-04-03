@@ -186,6 +186,8 @@ class Agenda extends JFrame {
                 data = line.split(":");
                 model.addRow(data);
             }
+            br.close();
+            fr.close();
         }catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(Agenda.this, "Failed while reading 'Agenda.txt' file",
                     "File 'Agenda.txt' not found", JOptionPane.ERROR_MESSAGE);
