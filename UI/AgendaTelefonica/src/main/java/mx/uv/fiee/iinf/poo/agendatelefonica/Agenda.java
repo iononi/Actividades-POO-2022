@@ -112,12 +112,12 @@ class Agenda extends JFrame {
         pnlTOP.setLayout(boxLayout);
         pnlTOP.add(pnlFields);
         pnlTOP.add(btnAdd);
-        pnlTOP.add(btnSave);
 
         // al botón ELIMINAR lo colocamos en un contenedor JPanel, con el objetivo de agegar más controles
         // en esa sección posteriormente
         JPanel pnlBOTTOM = new JPanel();
         pnlBOTTOM.add(btnDelete);
+        pnlBOTTOM.add(btnSave);
 
         // establecemos las dimensiones iniciales
         setSize(new Dimension(300, 400));
